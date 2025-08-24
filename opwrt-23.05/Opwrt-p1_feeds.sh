@@ -2,8 +2,13 @@
 # Description: OpenWrt DIY script part 1 (Before Update feeds)
 
 
-src-git packages https://github.com/coolsnowwolf/packages
-src-git luci https://github.com/coolsnowwolf/luci
-src-git routing https://git.openwrt.org/feed/routing.git
-src-git telephony https://git.openwrt.org/feed/telephony.git
+# 添加插件源码 Add a feed source
+#echo 'src-git small8 https://github.com/kenzok8/small-package' >>feeds.conf.default
+#echo 'src-git kenzo https://github.com/kenzok8/openwrt-packages' >>feeds.conf.default
+echo 'src-git small https://github.com/kenzok8/small' >>feeds.conf.default
 
+# Add Theme package
+rm -rf package/luci-theme-argon
+rm -rf package/luci-app-argon-config
+sudo git clone https://github.com/jerrykuku/luci-theme-argon.git package/luci-theme-argon
+sudo git clone https://github.com/jerrykuku/luci-app-argon-config.git package/luci-app-argon-config
