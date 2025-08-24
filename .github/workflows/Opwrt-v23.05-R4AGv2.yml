@@ -162,13 +162,17 @@ jobs:
 
     - name: Organize files
       id: organize
-      if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+      if: env.UPLOAD_FIRMWARE == 'true' && steps.compile.outputs.status == 'success' && !cancelled()
       run: |
-        cd openwrt/bin/targets/*/*
+        TARGET_DIR=$(find openwrt/bin/targets -type d -mindepth 2 -maxdepth 2 | head -n 1)
+        if [ -z "$TARGET_DIR" ]; then
+          echo "Target firmware path not found. Maybe compilation failed?"
+          exit 1
+        fi
+        cd "$TARGET_DIR"
         rm -rf packages
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
-        echo "::set-output name=status::success"   
-        #echo "status = success" >> $GITHUB_OUTPUT
+        echo "::set-output name=status::success"
 
     - name: Upload firmware directory
       uses: actions/upload-artifact@main
